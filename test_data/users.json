@@ -1,0 +1,30 @@
+[
+    {
+        "name" : "Robert",
+        "surname" : "Leska",
+        "email" : "rob@bobby.gg",
+        "phoneNr" : "1172345678",
+        "address1" : "Muta 101",
+        "address2" : "Muta 102",
+        "state" : "Slovenia",
+        "postCode" : "2366",
+        "dob" : "2024-10-08",
+        "countryCode" : "Slovenia (+386)",
+        "country" : "Slovenia",
+        "gender" : "Male"
+    },
+    {
+        "name" : "Simone",
+        "surname" : "Leska",
+        "email" : "gaga@bobby.gg",
+        "phoneNr" : "1172345678",
+        "address1" : "Muta 105",
+        "address2" : "Muta 106",
+        "state" : "Slovenia",
+        "postCode" : "2367",
+        "dob" : "2024-10-09",
+        "countryCode" : "Slovenia (+386)",
+        "country" : "Slovenia",
+        "gender" : "Female"
+    }
+]

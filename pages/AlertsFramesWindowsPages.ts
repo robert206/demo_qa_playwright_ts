@@ -1,5 +1,16 @@
 import {Page, Locator, expect, Dialog} from '@playwright/test';
 
+interface AlertConfig {
+    buttonLocator: Locator;
+    expectedType: 'alert' | 'confirm' | 'prompt';
+    expectedMessage: string | RegExp;
+    accept?: boolean;
+    inputText?: string;
+    resultLocator?: Locator;
+    expectedResult?: string;
+}
+
+
 
 class AlertsFramesWindowsPages {
 
@@ -99,17 +110,19 @@ class AlertsFramesWindowsPages {
 
     //regular alert
     async clickAndVerifyAlert () : Promise<void> {
-        this.page.waitForLoadState('domcontentloaded');
-        //setup listener preden se klikne
-        this.page.on('dialog', async (dialog: Dialog): Promise<void> => {
-            expect(dialog.type()).toBe("alert");
-            expect(dialog.message().trim()).toContain("You clicked a button");
+        //this.page.waitForLoadState('domcontentloaded');
+        this.handleAlert('alert', this.alertsPageBtn1, "You clicked a button", true);
+        // //setup listener preden se klikne
+        // this.page.on('dialog', async (dialog: Dialog): Promise<void> => {
+        //     expect(dialog.type()).toBe("alert");
+        //     expect(dialog.message().trim()).toContain("You clicked a button");
 
-            await dialog.accept(); //click ok 
-        });
-        //actual click on btn to trigger alert
-        await this.alertsPageBtn1.click();
+        //     await dialog.accept(); //click ok 
+        // });
+        // //actual click on btn to trigger alert
+        // await this.alertsPageBtn1.click();
     }
+ 
 
 
     //delayed -doesnt really matter as listener waits for it so no need for .waitForElement or wait ..etc
@@ -135,11 +148,9 @@ class AlertsFramesWindowsPages {
 
             if (accept) {
                 await dialog.accept();
-                this.page.off('dialog', ()=> {});
             }
             else 
                 await dialog.dismiss();
-                this.page.off('dialog', ()=> {});
         });
         await this.alertsPageConfirmBtn.click();
         await expect(this.alertsPageConfirmResult).toContainText(accept ? "Ok" : "Cancel");
@@ -158,7 +169,45 @@ class AlertsFramesWindowsPages {
         });
         await this.alertsPagePromptBtn.click();
         await expect(this.alertsPagePromptResult).toContainText(inputText);
-        this.page.off('dialog', async ()=> {});
+    }
+
+
+    //generic handler for all alert types and verificartion
+    async handleAlert( type: 'alert' | 'confirm' | 'prompt', btnLocator: Locator, expectedMessage: string,
+        YesNo?: boolean, inputText?: string) : Promise<void> {
+            await this.page.waitForLoadState('domcontentloaded');
+           
+            //ofni hendler špijunaža 
+            this.page.on('dialog', async (dialog: Dialog): Promise<void> => {
+                expect(dialog.type()).toBe(type);
+                expect(dialog.message()).toContain(expectedMessage);
+
+                //handlaj posamezne tipe posebej 
+                switch(type) {
+                //simple alert
+                    case 'alert':
+                        await dialog.accept();
+                        break;
+
+                    //confirm alert yes/cancel
+                    case 'confirm':
+                        if(YesNo) {
+                            await dialog.accept();
+                        }
+                        else {
+                            await dialog.dismiss();
+                        }
+                        break;
+
+                    //prompt alert input some txt    
+                    case 'prompt':
+                        if (inputText)
+                            await dialog.accept(inputText);
+                        break;  
+                }
+            });
+            expect (btnLocator).toBeVisible();
+            await btnLocator.click();
     }
 
 }

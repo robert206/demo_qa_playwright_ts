@@ -16,6 +16,9 @@ class HomePage {
         this.elementCard = page.getByText ('Elements', {exact: true} );
         this.formsCard = page.getByText ('Forms', {exact : true});
         this.alertsFrameWindowsCard = page.locator ("//div[@class='card-body']//h5[text()='Alerts, Frame & Windows']");
+        this.widgetsCard = page.getByText('Widgets', {exact : true});
+        this.interactionsCard = page.getByText ('Interactions', {exact : true});
+        this.bookStoreCard = page.getByText ('Book Store Application', {exact : true});
 
     }
 

@@ -6,6 +6,9 @@ import { WebTablesPage } from '../pages/WebTablesPage';
 import { LinksPage } from '../pages/LinksPage';
 import {PracticeFormPage} from '../pages/PracticeFormPage';
 import { AlertsFramesWindowsPages } from '../pages/AlertsFramesWindowsPages';
+import { WidgetsPage } from '../pages/WidgetsPage';
+import { InteractionsPage} from '../pages/InteractionsPage';
+import { BookStoreApplication } from '../pages/BookStoreApplication';
 
 
 declare module '@playwright/test' {
@@ -16,6 +19,9 @@ declare module '@playwright/test' {
     linksPage : LinksPage;
     practiceFormPage : PracticeFormPage;
     alertsFramesWindowsPages : AlertsFramesWindowsPages;
+    widgetsPage : WidgetsPage;
+    interactionsPage : InteractionsPage;
+    bookstoreApplication : BookStoreApplication;
   }
 }
 
@@ -28,6 +34,9 @@ export const test = base.extend<{
   linksPage : LinksPage;
   practiceFormPage : PracticeFormPage;
   alertsFramesWindowsPages : AlertsFramesWindowsPages;
+  widgetsPage : WidgetsPage;  
+  interactionsPage : InteractionsPage;
+  bookstoreApplication : BookStoreApplication;
 }>
 ({
   homePage: async ({ page }, use) => {
@@ -49,7 +58,16 @@ export const test = base.extend<{
   alertsFramesWindowsPages: async ({page}, use) => {
     await use (new AlertsFramesWindowsPages(page));
   },
-
+  widgetsPage : async ({page}, use )=> {
+    await use (new WidgetsPage(page));
+  },
+  interactionsPage : async ({page}, use) => {
+    await use (new InteractionsPage(page));
+  },
+  bookstoreApplication : async ({page}, use) => {
+    await use (new BookStoreApplication(page));
+  }
+    
 });
 
 export const expect = test.expect;
